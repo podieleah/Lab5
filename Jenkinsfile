@@ -1,14 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        SECRET_VAR = credentials('9c7c07ce-c984-45ec-84b5-7dad6edaaf0a') 
+    credentials {
+        githubToken = credentials('token') 
+        dockerHubCreds = credentials('docker') 
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'Lab5', url: 'git@github.com:podieleah/Lab5.git' 
+                git branch: 'main', url: 'git@github.com:podieleah/Lab5.git', credentialsId: 'githubToken' 
             }
         }
         stage('Build') {
@@ -18,7 +19,7 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             steps {
-                sh 'docker login -u podieleah -p Sumted1215' 
+                sh "echo ${dockerHubCreds.password} | docker login -u ${dockerHubCreds.username} --password-stdin" 
                 sh 'docker push podieleah/my-nginx-image' 
             }
         }
