@@ -19,8 +19,10 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             steps {
-                sh "echo ${dockerHubCreds.password} | docker login -u ${dockerHubCreds.username} --password-stdin" 
-                sh 'docker push podieleah/my-nginx-image' 
+                withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PWD')]) {
+                    sh "echo ${DOCKER_HUB_PWD} | docker login -u ${DOCKER_HUB_USER} --password-stdin"
+                    sh 'docker push podieleah/my-nginx-image'
+                }
             }
         }
         stage('Run') {
