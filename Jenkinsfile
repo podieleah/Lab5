@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'git@github.com:podieleah/Lab5.git', credentialsId: 'githubToken' 
+                git branch: 'main', url: 'git@github.com:podieleah/Lab5.git', credentialsId: 'Lab5' 
             }
         }
         stage('Build') {
