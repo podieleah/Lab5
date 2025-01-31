@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage("Checkout") {
             steps {
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git', credentialsId: 'github-token' 
+                git branch: 'main', url: 'https://github.com/podieleah/Lab5.git', credentialsId: 'github-token' 
             }
         }
         stage("Nginx") {
