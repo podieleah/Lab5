@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SECRET_VAR = credentials('secret_text') 
+        SECRET_VAR = credentials('9c7c07ce-c984-45ec-84b5-7dad6edaaf0a') 
     }
 
     stages {
