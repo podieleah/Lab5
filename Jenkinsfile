@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SECRET_VAR = credentials('jenkins-secret')
+        SECRET_VAR = credentials('secret_text')
         DOCKERHUB_CREDENTIALS = credentials('docker')
     }
 
