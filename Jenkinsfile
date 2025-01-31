@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Run') {
             steps {
-                sh 'docker run -d -p 8080:80 podieleah/my-nginx-image' 
+                sh 'docker run -d -p 80:80 podieleah/my-nginx-image' 
             }
         }
     }
