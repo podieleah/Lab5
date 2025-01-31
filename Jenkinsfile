@@ -1,34 +1,23 @@
 pipeline {
     agent any
 
-    credentials {
-        githubToken = credentials('token') 
-        dockerHubCreds = credentials('docker') 
+    environment {
+        SECRET_VAR = credentials('jenkins-secret') 
+            DOCKERHUB_CREDENTIALS = credentials('docker') 
     }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'git@github.com:podieleah/Lab5.git', credentialsId: 'Lab5' 
+        stages{
+            stage("Nginx"){
+                steps{
+                    sh 'docker run -d -p 80:80 --name nginx nginx'
+                    sh "docker exec nginx sh -c 'echo \"hello jenkins! ${SECRET_VAR}\" > /usr/share/nginx/html/index.html
+                }
             }
-        }
-        stage('Build') {
-            steps {
-                sh 'docker build -t podieleah/my-nginx-image .' 
-            }
-        }
-        stage('Push to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_HUB_USER', passwordVariable: 'DOCKER_HUB_PWD')]) {
-                    sh "echo ${DOCKER_HUB_PWD} | docker login -u ${DOCKER_HUB_USER} --password-stdin"
-                    sh 'docker push podieleah/my-nginx-image'
+            stage("push"){
+                steps{
+                    sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag nginx podieleah/mynewnginx:latest"
+                    sh "docker push podieleah/mynewnginx:latest"
                 }
             }
         }
-        stage('Run') {
-            steps {
-                sh 'docker run -d -p 8080:80 podieleah/my-nginx-image' 
-            }
-        }
-    }
 }
